@@ -1,0 +1,71 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-header text-center bg-primary text-white">
+          <h2>Register - Haisam Test*</h2>
+        </div>
+        <div class="card-body p-4">
+          <!-- Notes Section -->
+          <div class="alert alert-info mb-4">
+            <strong>Note:</strong> The following usernames are already taken: 
+            <strong>john, admin, testuser</strong>. 
+            <em>(This is an example for the interview tester)</em>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+            <!-- Username Field -->
+            <div class="form-group mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                id="username"
+                class="form-control"
+                formControlName="username"
+                [class.is-invalid]="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
+              />
+              <div *ngIf="registrationForm.get('username')?.hasError('required') && registrationForm.get('username')?.touched" class="invalid-feedback">
+                Username is required.
+              </div>
+              <div *ngIf="registrationForm.get('username')?.hasError('pattern') && registrationForm.get('username')?.touched" class="invalid-feedback">
+                Username must be lowercase and contain only letters and numbers.
+              </div>
+              <div *ngIf="usernameTaken && registrationForm.get('username')?.touched" class="invalid-feedback">
+                Username is not available.
+              </div>
+            </div>
+
+            <!-- Country Field -->
+            <div class="form-group mb-4">
+              <label for="country" class="form-label">Country</label>
+              <select
+                id="country"
+                class="form-control"
+                formControlName="country"
+                [class.is-invalid]="registrationForm.get('country')?.invalid && registrationForm.get('country')?.touched">
+                <option value="">Select a country</option>
+                <option *ngFor="let country of countries" [value]="country.name">
+                  <img [src]="country.flag" alt="{{ country.name }} flag" class="me-2" /> {{ country.name }}
+                </option>
+              </select>
+              <div *ngIf="registrationForm.get('country')?.hasError('required') && registrationForm.get('country')?.touched" class="invalid-feedback">
+                Country is required.
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="!registrationForm.valid || usernameTaken">
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
